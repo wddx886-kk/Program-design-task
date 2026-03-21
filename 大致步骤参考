@@ -1,0 +1,391 @@
+📋 项目开发详细任务分解
+🗓️ 第1周：需求分析与系统设计
+前端负责人任务
+第1天：界面设计规划
+
+ 手绘主菜单界面草图
+ 设计学生信息录入界面布局
+ 规划消费记录显示格式
+ 设计成绩管理界面结构
+第2天：交互流程设计
+
+ 绘制用户操作流程图
+ 设计菜单导航逻辑
+ 规划错误提示界面
+ 确定输入验证流程
+第3-4天：函数接口设计
+
+// 需要设计的接口函数
+void showMainMenu();                    // 显示主菜单
+void showStudentMenu();                 // 显示学生信息子菜单
+void showConsumptionMenu();             // 显示消费记录子菜单
+void showCourseMenu();                  // 显示成绩管理子菜单
+int getUserInput();                     // 获取用户选择
+void displayStudentInfo(Student stu);   // 显示单个学生信息
+void displayConsumptionInfo(Cons cons); // 显示消费记录
+void displayCourseInfo(Course crs);     // 显示成绩信息
+第5天：界面原型实现
+
+ 实现主菜单显示函数
+ 创建基本的输入输出框架
+ 实现简单的菜单选择逻辑
+ 测试界面显示效果
+后端负责人任务
+第1天：数据结构设计
+
+// 设计并验证结构体定义
+struct Student {
+    char name[50];        // 姓名
+    char id[20];          // 学号
+    char gender[10];      // 性别
+    char birth[20];       // 出生年月
+    char major[50];       // 专业
+    char hobby[100];      // 爱好
+};
+
+struct Consumption {
+    char studentId[20];   // 学号关联
+    float amount;         // 消费金额
+    char description[200]; // 消费描述
+    char date[20];        // 消费日期
+};
+
+struct Course {
+    char studentId[20];   // 学号关联
+    char courseName[50];  // 课程名称
+    float score;          // 成绩
+    char semester[20];    // 学期
+};
+第2-3天：文件存储设计
+
+ 设计文件存储格式
+ 创建文件读写函数框架
+ 设计数据序列化方案
+ 规划文件目录结构
+第4天：核心算法设计
+
+ 设计学生信息查找算法
+ 规划消费统计计算方法
+ 设计成绩管理逻辑
+ 制定数据关联策略
+第5天：基础函数实现
+
+// 实现基础操作函数
+int addStudent(Student stu);           // 添加学生
+Student* findStudent(char* id);        // 查找学生
+int deleteStudent(char* id);          // 删除学生
+int modifyStudent(char* id, Student newInfo); // 修改学生
+🗓️ 第2周：核心功能开发
+前端负责人任务
+第1-2天：主菜单系统
+
+void showMainMenu() {
+    system("cls");  // 清屏
+    printf("========================\n");
+    printf("  个人信息管理系统\n");
+    printf("========================\n");
+    printf("1. 学生信息管理\n");
+    printf("2. 消费记录管理\n");
+    printf("3. 课程成绩管理\n");
+    printf("0. 退出系统\n");
+    printf("========================\n");
+    printf("请输入选择(0-3): ");
+}
+ 实现主菜单循环显示
+ 添加菜单选择验证
+ 实现菜单间切换逻辑
+ 测试菜单功能完整性
+第3-4天：学生信息界面
+
+void showStudentMenu() {
+    printf("\n--- 学生信息管理 ---\n");
+    printf("1. 添加学生信息\n");
+    printf("2. 查找学生信息\n");
+    printf("3. 删除学生信息\n");
+    printf("4. 修改学生信息\n");
+    printf("5. 显示所有学生\n");
+    printf("0. 返回主菜单\n");
+    printf("请选择: ");
+}
+
+void inputStudentInfo(Student* stu) {
+    printf("请输入姓名: ");
+    scanf("%s", stu->name);
+    printf("请输入学号: ");
+    scanf("%s", stu->id);
+    printf("请输入性别: ");
+    scanf("%s", stu->gender);
+    // ... 其他字段输入
+}
+ 实现学生信息输入界面
+ 创建信息显示格式
+ 添加输入验证提示
+ 测试界面交互效果
+第5天：消费和成绩界面
+
+ 实现消费记录管理界面
+ 创建成绩管理菜单
+ 设计数据显示格式
+ 集成各模块界面
+后端负责人任务
+第1-2天：学生信息管理
+
+// 学生信息操作实现
+Student students[100];  // 存储学生数组
+int studentCount = 0;   // 学生数量
+
+int addStudent(Student stu) {
+    if (studentCount >= 100) {
+        printf("学生数量已满!\n");
+        return 0;
+    }
+    
+    // 检查学号是否重复
+    for (int i = 0; i < studentCount; i++) {
+        if (strcmp(students[i].id, stu.id) == 0) {
+            printf("学号已存在!\n");
+            return 0;
+        }
+    }
+    
+    students[studentCount++] = stu;
+    return 1;
+}
+ 实现学生信息添加功能
+ 完成学号重复检查
+ 实现学生信息查找
+ 完成数据验证逻辑
+第3-4天：数据操作核心
+
+Student* findStudent(char* id) {
+    for (int i = 0; i < studentCount; i++) {
+        if (strcmp(students[i].id, id) == 0) {
+            return &students[i];
+        }
+    }
+    return NULL;
+}
+
+int deleteStudent(char* id) {
+    for (int i = 0; i < studentCount; i++) {
+        if (strcmp(students[i].id, id) == 0) {
+            // 将后面的数据前移
+            for (int j = i; j < studentCount - 1; j++) {
+                students[j] = students[j + 1];
+            }
+            studentCount--;
+            return 1;
+        }
+    }
+    return 0;
+}
+ 实现学生信息删除功能
+ 完成学生信息修改
+ 实现数据遍历显示
+ 添加错误处理机制
+第5天：消费和成绩功能
+
+// 消费记录管理
+Consumption consumptions[500];
+int consumptionCount = 0;
+
+int addConsumption(Cons cons) {
+    if (consumptionCount >= 500) {
+        printf("消费记录已满!\n");
+        return 0;
+    }
+    
+    consumptions[consumptionCount++] = cons;
+    return 1;
+}
+
+float getTotalConsumption(char* studentId) {
+    float total = 0.0;
+    for (int i = 0; i < consumptionCount; i++) {
+        if (strcmp(consumptions[i].studentId, studentId) == 0) {
+            total += consumptions[i].amount;
+        }
+    }
+    return total;
+}
+ 实现消费记录添加
+ 完成消费总额计算
+ 实现成绩管理功能
+ 添加数据统计功能
+🗓️ 第3周：功能集成与测试
+前端负责人任务
+第1-2天：功能整合
+
+ 整合所有菜单界面
+ 实现模块间数据传递
+ 完善用户交互流程
+ 测试整体界面切换
+第3天：输入验证
+
+int validateStudentId(char* id) {
+    if (strlen(id) < 5 || strlen(id) > 20) {
+        printf("学号长度应为5-20位!\n");
+        return 0;
+    }
+    
+    for (int i = 0; id[i] != '\0'; i++) {
+        if (!isdigit(id[i])) {
+            printf("学号只能包含数字!\n");
+            return 0;
+        }
+    }
+    return 1;
+}
+ 实现输入数据验证
+ 添加错误提示功能
+ 完善异常处理
+ 测试输入边界情况
+第4-5天：界面优化
+
+ 美化界面显示格式
+ 添加操作成功提示
+ 优化用户操作体验
+ 完善帮助信息显示
+后端负责人任务
+第1-2天：文件操作实现
+
+void saveToFile() {
+    FILE* fp = fopen("students.dat", "wb");
+    if (fp == NULL) {
+        printf("无法保存文件!\n");
+        return;
+    }
+    
+    fwrite(&studentCount, sizeof(int), 1, fp);
+    fwrite(students, sizeof(Student), studentCount, fp);
+    
+    fclose(fp);
+    printf("数据保存成功!\n");
+}
+
+void loadFromFile() {
+    FILE* fp = fopen("students.dat", "rb");
+    if (fp == NULL) {
+        printf("未找到数据文件!\n");
+        return;
+    }
+    
+    fread(&studentCount, sizeof(int), 1, fp);
+    fread(students, sizeof(Student), studentCount, fp);
+    
+    fclose(fp);
+    printf("数据加载成功!\n");
+}
+ 实现数据保存功能
+ 完成文件数据读取
+ 添加文件错误处理
+ 测试数据持久化
+第3天：数据关联
+
+void showStudentAllInfo(char* studentId) {
+    Student* stu = findStudent(studentId);
+    if (stu == NULL) {
+        printf("未找到该学生!\n");
+        return;
+    }
+    
+    // 显示基本信息
+    printf("\n=== 学生基本信息 ===\n");
+    printf("姓名: %s\n", stu->name);
+    printf("学号: %s\n", stu->id);
+    // ... 其他信息
+    
+    // 显示消费记录
+    printf("\n=== 消费记录 ===\n");
+    float total = 0;
+    for (int i = 0; i < consumptionCount; i++) {
+        if (strcmp(consumptions[i].studentId, studentId) == 0) {
+            printf("%s %.2f\n", consumptions[i].date, consumptions[i].amount);
+            total += consumptions[i].amount;
+        }
+    }
+    printf("消费总额: %.2f\n", total);
+}
+ 实现学生-消费关联查询
+ 完成学生-成绩关联显示
+ 优化数据查询效率
+ 测试关联功能正确性
+第4-5天：性能优化
+
+ 优化查找算法
+ 减少重复计算
+ 优化内存使用
+ 完善数据备份机制
+🗓️ 第4周：系统测试与完善
+前端负责人任务
+第1-2天：全面测试
+
+ 测试所有菜单功能
+ 验证输入输出的正确性
+ 测试异常情况处理
+ 记录发现的问题
+第3天：用户体验优化
+
+ 添加操作确认提示
+ 优化界面布局
+ 完善帮助信息
+ 测试易用性
+第4-5天：文档编写
+
+ 编写用户操作手册
+ 整理功能说明文档
+ 记录系统使用方法
+ 准备项目演示材料
+后端负责人任务
+第1-2天：功能测试
+
+ 测试所有CRUD操作
+ 验证数据一致性
+ 测试文件操作稳定性
+ 检查内存泄漏
+第3天：边界测试
+
+void testBoundaryConditions() {
+    // 测试最大数据量
+    for (int i = 0; i < 100; i++) {
+        Student stu;
+        sprintf(stu.id, "%d", i);
+        addStudent(stu);
+    }
+    
+    // 测试重复学号
+    Student stu;
+    strcpy(stu.id, "1");
+    int result = addStudent(stu);  // 应该失败
+    
+    // 测试空数据查找
+    Student* found = findStudent("999");  // 应该返回NULL
+}
+ 测试数据边界情况
+ 验证系统稳定性
+ 测试并发操作安全
+ 检查资源释放
+第4-5天：系统完善
+
+ 修复发现的问题
+ 优化代码结构
+ 添加注释说明
+ 完成最终版本
+🔄 每日协作机制
+每日同步会议（15分钟）
+上午9:00：汇报昨日进展
+中午12:00：讨论遇到的问题
+下午5:00：确认明日任务
+代码审查清单
+ 函数命名规范
+ 变量命名清晰
+ 注释完整准确
+ 错误处理完善
+ 内存管理正确
+测试验证标准
+ 基本功能正常运行
+ 异常情况妥善处理
+ 数据一致性保证
+ 用户界面友好
+ 文件操作稳定
+这个详细的任务分配确保了两个人都有明确的工作目标，既分工又协作，能够高效完成项目开发！
