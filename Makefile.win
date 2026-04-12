@@ -1,0 +1,29 @@
+# Project: PersonallnfoSystem
+# Makefile created by Dev-C++ 6.7.5
+
+CPP      = g++.exe -D__DEBUG__
+CC       = gcc.exe -D__DEBUG__
+WINDRES  = windres.exe
+OBJ      = main.o
+LINKOBJ  = main.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/mingw32/lib" -g3 -static
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/9.2.0/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/9.2.0/include-fixed"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/9.2.0/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/9.2.0/include-fixed" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/9.2.0/include/c++" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/9.2.0/include/c++/mingw32" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/9.2.0/include/c++/backward"
+BIN      = PersonallnfoSystem.exe
+CXXFLAGS = $(CXXINCS) -O2 -g3 Iinclude
+ENCODINGS = -finput-charset=utf-8 -fexec-charset=gbk
+CFLAGS   = $(INCS) -O2 -g3 Iinclude
+RM       = del /q /f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o "$(BIN)" $(LIBS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS) 
