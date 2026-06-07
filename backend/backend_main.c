@@ -19,7 +19,7 @@ void cleanup_backend() {
     }
 }
 
-// 后端主程序（实际上不运行GUI，只是提供API服务）
+// 后端主程序
 int main() {
     // 初始化后端服务
     BackendAPI *api = get_backend_api();
@@ -27,10 +27,7 @@ int main() {
     printf("Backend service initialized successfully!\n");
     printf("Waiting for frontend requests...\n");
 
-    // 在实际应用中，这里会启动网络服务或IPC机制
-    // 为了演示，我们只是保持后端运行
 
-    // 清理资源
     cleanup_backend();
     return 0;
 }

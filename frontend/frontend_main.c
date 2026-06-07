@@ -307,6 +307,158 @@ void consumption_management(BackendAPI *api) {
 				pause_screen();
 				break;
 			}
+			case 3: {
+				char id[20];
+				printf("\n=== 修改消费记录 ===\n");
+				validate_input("输入学号: ", id, sizeof(id));
+
+				Consumption consumptions[MAX_CONSUMPTION];
+				int count;
+				Result result = api->find_consumptions(id, consumptions, &count);
+
+				if (result != SUCCESS) {
+					printf("未找到该学生的消费记录!\n");
+					pause_screen();
+					break;
+				}
+
+				printf("\n该学生的消费记录:\n");
+				printf("===========================================================================================\n");
+				printf("| %-5s | %-10s | %-20s | %-12s |\n", "序号", "金额", "描述", "日期");
+				printf("===========================================================================================\n");
+				for (int i = 0; i < count; i++) {
+					printf("| %-5d | %-10.2f | %-20s | %-12s |\n",
+					       i + 1, consumptions[i].amount, consumptions[i].description, consumptions[i].date);
+				}
+				printf("===========================================================================================\n");
+
+				printf("选择要修改的记录序号(1-%d): ", count);
+				int index;
+				scanf("%d", &index);
+				getchar();
+
+				if (index < 1 || index > count) {
+					printf("无效序号!\n");
+					pause_screen();
+					break;
+				}
+
+				Consumption consumption = consumptions[index - 1];
+				printf("选择要修改的字段:\n");
+				printf("1. 金额: %.2f\n", consumption.amount);
+				printf("2. 描述: %s\n", consumption.description);
+				printf("3. 日期: %s\n", consumption.date);
+				printf("请输入选择(1-3): ");
+
+				int field;
+				scanf("%d", &field);
+				getchar();
+
+				switch (field) {
+					case 1:
+						consumption.amount = validate_float_input("输入新消费金额: ");
+						break;
+					case 2:
+						validate_input("输入新消费描述: ", consumption.description, sizeof(consumption.description));
+						break;
+					case 3:
+						validate_input("输入新消费日期: ", consumption.date, sizeof(consumption.date));
+						break;
+					default:
+						printf("无效选择!\n");
+						pause_screen();
+						break;
+				}
+
+				if (field < 1 || field > 3) {
+					break;
+				}
+
+				result = api->modify_consumption(id, index - 1, consumption);
+				if (result == SUCCESS) {
+					printf("消费记录修改成功!\n");
+				} else {
+					printf("修改失败!\n");
+				}
+				pause_screen();
+				break;
+			}
+			case 4: {
+				char id[20];
+				printf("\n=== 删除消费记录 ===\n");
+				validate_input("输入学号: ", id, sizeof(id));
+
+				Consumption consumptions[MAX_CONSUMPTION];
+				int count;
+				Result result = api->find_consumptions(id, consumptions, &count);
+
+				if (result != SUCCESS) {
+					printf("未找到该学生的消费记录!\n");
+					pause_screen();
+					break;
+				}
+
+				printf("\n该学生的消费记录:\n");
+				printf("===========================================================================================\n");
+				printf("| %-5s | %-10s | %-20s | %-12s |\n", "序号", "金额", "描述", "日期");
+				printf("===========================================================================================\n");
+				for (int i = 0; i < count; i++) {
+					printf("| %-5d | %-10.2f | %-20s | %-12s |\n",
+					       i + 1, consumptions[i].amount, consumptions[i].description, consumptions[i].date);
+				}
+				printf("===========================================================================================\n");
+
+				printf("选择要删除的记录序号(1-%d): ", count);
+				int index;
+				scanf("%d", &index);
+				getchar();
+
+				if (index < 1 || index > count) {
+					printf("无效序号!\n");
+					pause_screen();
+					break;
+				}
+
+				printf("确认删除该消费记录 (y/n)? ");
+				char confirm;
+				scanf("%c", &confirm);
+				getchar();
+
+				if (confirm == 'y' || confirm == 'Y') {
+					result = api->delete_consumption(id, index - 1);
+					if (result == SUCCESS) {
+						printf("消费记录删除成功!\n");
+					} else {
+						printf("删除失败!\n");
+					}
+				} else {
+					printf("删除操作已取消!\n");
+				}
+				pause_screen();
+				break;
+			}
+			case 5: {
+				printf("\n=== 所有消费记录 ===\n");
+				Consumption consumptions[MAX_CONSUMPTION];
+				int count;
+
+				Result result = api->get_all_consumptions(consumptions, &count);
+				if (result == SUCCESS) {
+					printf("========================================================================================================\n");
+					printf("| %-15s | %-10s | %-20s | %-12s |\n", "学号", "金额", "描述", "日期");
+					printf("========================================================================================================\n");
+					for (int i = 0; i < count; i++) {
+						printf("| %-15s | %-10.2f | %-20s | %-12s |\n",
+						       consumptions[i].studentId, consumptions[i].amount,
+						       consumptions[i].description, consumptions[i].date);
+					}
+					printf("========================================================================================================\n");
+				} else {
+					printf("没有消费记录!\n");
+				}
+				pause_screen();
+				break;
+			}
 			case 6: {
 				char id[20];
 				printf("\n=== 消费总额统计 ===\n");
@@ -394,6 +546,163 @@ void course_management(BackendAPI *api) {
 					printf("=================================================================================\n");
 				} else {
 					printf("未找到该学生的课程成绩!\n");
+				}
+				pause_screen();
+				break;
+			}
+			case 3: {
+				char id[20];
+				printf("\n=== 修改课程成绩 ===\n");
+				validate_input("输入学号: ", id, sizeof(id));
+
+				Course courses[MAX_COURSES];
+				int count;
+				Result result = api->find_courses(id, courses, &count);
+
+				if (result != SUCCESS) {
+					printf("未找到该学生的课程成绩!\n");
+					pause_screen();
+					break;
+				}
+
+				printf("\n该学生的课程成绩:\n");
+				printf("===========================================================================================\n");
+				printf("| %-5s | %-20s | %-8s | %-15s |\n", "序号", "课程名称", "成绩", "学期");
+				printf("===========================================================================================\n");
+				for (int i = 0; i < count; i++) {
+					printf("| %-5d | %-20s | %-8.1f | %-15s |\n",
+					       i + 1, courses[i].courseName, courses[i].score, courses[i].semester);
+				}
+				printf("===========================================================================================\n");
+
+				printf("选择要修改的记录序号(1-%d): ", count);
+				int index;
+				scanf("%d", &index);
+				getchar();
+
+				if (index < 1 || index > count) {
+					printf("无效序号!\n");
+					pause_screen();
+					break;
+				}
+
+				Course course = courses[index - 1];
+				printf("选择要修改的字段:\n");
+				printf("1. 课程名称: %s\n", course.courseName);
+				printf("2. 成绩: %.1f\n", course.score);
+				printf("3. 学期: %s\n", course.semester);
+				printf("请输入选择(1-3): ");
+
+				int field;
+				scanf("%d", &field);
+				getchar();
+
+				switch (field) {
+					case 1:
+						validate_input("输入新课程名称: ", course.courseName, sizeof(course.courseName));
+						break;
+					case 2:
+						course.score = validate_float_input("输入新成绩(0-100): ");
+						if (course.score < 0 || course.score > 100) {
+							printf("成绩必须在0-100之间!\n");
+							pause_screen();
+							break;
+						}
+						break;
+					case 3:
+						validate_input("输入新学期: ", course.semester, sizeof(course.semester));
+						break;
+					default:
+						printf("无效选择!\n");
+						pause_screen();
+						break;
+				}
+
+				if (field < 1 || field > 3 || course.score < 0 || course.score > 100) {
+					break;
+				}
+
+				result = api->modify_course(id, index - 1, course);
+				if (result == SUCCESS) {
+					printf("课程成绩修改成功!\n");
+				} else {
+					printf("修改失败!\n");
+				}
+				pause_screen();
+				break;
+			}
+			case 4: {
+				char id[20];
+				printf("\n=== 删除课程成绩 ===\n");
+				validate_input("输入学号: ", id, sizeof(id));
+
+				Course courses[MAX_COURSES];
+				int count;
+				Result result = api->find_courses(id, courses, &count);
+
+				if (result != SUCCESS) {
+					printf("未找到该学生的课程成绩!\n");
+					pause_screen();
+					break;
+				}
+
+				printf("\n该学生的课程成绩:\n");
+				printf("===========================================================================================\n");
+				printf("| %-5s | %-20s | %-8s | %-15s |\n", "序号", "课程名称", "成绩", "学期");
+				printf("===========================================================================================\n");
+				for (int i = 0; i < count; i++) {
+					printf("| %-5d | %-20s | %-8.1f | %-15s |\n",
+					       i + 1, courses[i].courseName, courses[i].score, courses[i].semester);
+				}
+				printf("===========================================================================================\n");
+
+				printf("选择要删除的记录序号(1-%d): ", count);
+				int index;
+				scanf("%d", &index);
+				getchar();
+
+				if (index < 1 || index > count) {
+					printf("无效序号!\n");
+					pause_screen();
+					break;
+				}
+
+				printf("确认删除该课程成绩 (y/n)? ");
+				char confirm;
+				scanf("%c", &confirm);
+				getchar();
+
+				if (confirm == 'y' || confirm == 'Y') {
+					result = api->delete_course(id, index - 1);
+					if (result == SUCCESS) {
+						printf("课程成绩删除成功!\n");
+					} else {
+						printf("删除失败!\n");
+					}
+				} else {
+					printf("删除操作已取消!\n");
+				}
+				pause_screen();
+				break;
+			}
+			case 5: {
+				printf("\n=== 所有课程成绩 ===\n");
+				Course courses[MAX_COURSES];
+				int count;
+
+				Result result = api->get_all_courses(courses, &count);
+				if (result == SUCCESS) {
+					printf("========================================================================================================\n");
+					printf("| %-15s | %-20s | %-8s | %-15s |\n", "学号", "课程名称", "成绩", "学期");
+					printf("========================================================================================================\n");
+					for (int i = 0; i < count; i++) {
+						printf("| %-15s | %-20s | %-8.1f | %-15s |\n",
+						       courses[i].studentId, courses[i].courseName,
+						       courses[i].score, courses[i].semester);
+					}
+					printf("========================================================================================================\n");
+				} else {
+					printf("没有课程成绩记录!\n");
 				}
 				pause_screen();
 				break;

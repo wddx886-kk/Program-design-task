@@ -1,6 +1,8 @@
 #include "../../../include/interfaces.h"
 
 // 声明管理器函数
+
+// 学生管理器函数
 extern Result init_student_manager();
 extern Result add_student(Student student);
 extern Result find_student(const char *id, Student *result);
@@ -10,6 +12,7 @@ extern Result get_all_students(Student *array, int *count);
 extern int is_student_exist(const char *id);
 extern int get_student_count();
 
+// 消费管理器函数
 extern Result init_consumption_manager();
 extern Result add_consumption(Consumption consumption);
 extern Result find_consumptions(const char *id, Consumption *array, int *count);
@@ -18,6 +21,8 @@ extern Result delete_consumption(const char *id, int index);
 extern Result get_all_consumptions(Consumption *array, int *count);
 extern float get_total_consumption(const char *id);
 
+
+// 课程管理器函数
 extern Result init_course_manager();
 extern Result add_course(Course course);
 extern Result find_courses(const char *id, Course *array, int *count);
