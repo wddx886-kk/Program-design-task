@@ -1,0 +1,28 @@
+backend
+   sre
+      api
+         backend_api.c
+      core
+         consumption_manager.c
+         course_manager.c
+         student_manager.c
+      storage
+         file_storage.c
+   backend_main.c
+data
+   consumptions.dat
+   courses.dat
+   students.dat
+frontend
+   frontend_main.c
+include
+   common.c
+   common.h
+   date_structures.h
+   interfaces.h
+Makefile
+backend_main.o
+common.o
+frontend.exe
+frontend_main.o
+Makefile.win
